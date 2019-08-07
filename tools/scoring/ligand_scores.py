@@ -1,5 +1,6 @@
 import os
 import numpy as np
+import operator
 from rdkit import Chem
 from rdkit.Chem import AllChem, rdShapeHelpers
 from rdkit.Chem.FeatMaps import FeatMaps
@@ -141,3 +142,22 @@ class SuCOS:
             idx += 1
 
         return results_sucos, results_tani, smi_mol, prb_mols, reflig
+
+    def select_high_or_low(self, results, number, high=True):
+        '''
+        Select the highest (default) or lowest (high=False) value from a results dict (results_sucos or results_tani)
+        :param results:
+        :param number:
+        :param high:
+        :return:
+        '''
+        ids = []
+        r = results
+        while len(ids) < number:
+            if high:
+                i = max(results.items(), key=operator.itemgetter(1))[0]
+            else:
+                i = min(results.items(), key=operator.itemgetter(1))[0]
+            ids.append(int(i))
+            r.pop(i, None)
+        return ids
