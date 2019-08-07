@@ -6,7 +6,7 @@ from rdkit.Chem.FeatMaps import FeatMaps
 from rdkit import RDConfig
 
 # SuCOS code adapted from:
-# https://bitbucket.org/Susanhleung/sucos/src/master/calc_SuCOS.py)
+# https://bitbucket.org/Susanhleung/sucos/src/master/calc_SuCOS.py
 
 
 class SuCOS:
@@ -33,6 +33,7 @@ class SuCOS:
 
         if target_s:
             self.target_s = target_s
+
 
     def get_fm_score(self, small_m=None, large_m=None,
                             score_mode=FeatMaps.FeatMapScoreMode.All):
@@ -72,8 +73,8 @@ class SuCOS:
     def sucos_mol_to_mol(self, mol1, mol2, score_mode=FeatMaps.FeatMapScoreMode.All):
         '''
         Get the SuCOS score for one mol compared to another mol (mol=rdkit mol object)
-        :param mol1: rdkit mol object
-        :param mol2: rdkit mol object
+        :param mol1: rdkit mol object (small mol)
+        :param mol2: rdkit mol object (large mol)
         :param score_mode: default = featuremaps score, defined in init
         :return:
         '''
@@ -106,9 +107,8 @@ class SuCOS:
             prb_mols: a list of rdkit mol objects for the prb mols
             reflig: an rdkit mol object for the reference
         '''
-        
+
         reflig = Chem.MolFromMolFile(ref_file, sanitize=True)
-        ref = Chem.AddHs(reflig)
         prb_mols = Chem.SDMolSupplier(prb_file, sanitize=True)
         prb_mols = [x for x in prb_mols if x]
         idx = 0
@@ -120,17 +120,8 @@ class SuCOS:
 
         for prb_mol in prb_mols:
 
-            prb = Chem.AddHs(prb_mol)
-
-            fm_score = fm_score(ref, prb, score_mode)
-            fm_score = np.clip(fm_score, 0, 1)
-
-            protrude_dist = rdShapeHelpers.ShapeProtrudeDist(ref, prb,
-                                                             allowReordering=False)
-            protrude_dist = np.clip(protrude_dist, 0, 1)
-
-            SuCOS_score = 0.5 * fm_score + 0.5 * (1 - protrude_dist)
-            tanimoto_score = Chem.rdShapeHelpers.ShapeTanimotoDist(ref, prb)
+            SuCOS_score = self.sucos_mol_to_mol(mol1=reflig, mol2=prb_mol, score_mode=score_mode)
+            tanimoto_score = Chem.rdShapeHelpers.ShapeTanimotoDist(reflig, prb_mol)
 
             results_sucos[str(idx)] = SuCOS_score
             results_tani[str(idx)] = tanimoto_score
