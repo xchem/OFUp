@@ -15,6 +15,9 @@ class SuCOS:
         Setup of the SuCOS scoring class. If you do not set reference or target_s, you will have to feed them
         as rdkit mol objects to each class method/function.
 
+        Sets: self.reference: an rdkit mol object of the reference mol
+              self.target_s: a list of rdkit mol objects for the target mols
+
         :param reference: an sdf or mol file containing the reference (hit) molecule
         :param target_s: an sdf or mol file containing one or multiple molecules to compare against reference
         '''
@@ -29,10 +32,12 @@ class SuCOS:
                 'Aromatic', 'Hydrophobe', 'LumpedHydrophobe')
 
         if reference:
-            self.reference = reference
+            refs = Chem.SDMolSupplier(reference, sanitize=True)
+            self.reference = [x for x in refs if x][0]
 
         if target_s:
-            self.target_s = target_s
+            tgts = Chem.SDMolSupplier(target_s, sanitize=True)
+            self.target_s = [x for x in tgts if x]
 
 
     def get_fm_score(self, small_m=None, large_m=None,
