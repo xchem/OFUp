@@ -11,6 +11,13 @@ from rdkit import RDConfig
 
 class SuCOS:
     def __init__(self, reference=None, target_s=None):
+        '''
+        Setup of the SuCOS scoring class. If you do not set reference or target_s, you will have to feed them
+        as rdkit mol objects to each class method/function.
+
+        :param reference: an sdf or mol file containing the reference (hit) molecule
+        :param target_s: an sdf or mol file containing one or multiple molecules to compare against reference
+        '''
         self.fdef = AllChem.BuildFeatureFactory(os.path.join(RDConfig.RDDataDir, 'BaseFeatures.fdef'))
 
         self.fmParams = {}
@@ -29,6 +36,13 @@ class SuCOS:
 
     def get_fm_score(self, small_m=None, large_m=None,
                             score_mode=FeatMaps.FeatMapScoreMode.All):
+        '''
+        Get the feature-map score for a small molecule vs. a large molecule
+        :param small_m: rdkit mol object for the small molecule
+        :param large_m: rdkit mol object for the large molecule
+        :param score_mode: default = featuremaps score, defined in init
+        :return: the value of the feature map score
+        '''
 
         if not small_m and not self.reference:
             raise Exception('Reference molecule not set! Please specify or provide to init')
@@ -56,10 +70,17 @@ class SuCOS:
         return fm_score
 
     def sucos_mol_to_mol(self, mol1, mol2, score_mode=FeatMaps.FeatMapScoreMode.All):
+        '''
+        Get the SuCOS score for one mol compared to another mol (mol=rdkit mol object)
+        :param mol1: rdkit mol object
+        :param mol2: rdkit mol object
+        :param score_mode: default = featuremaps score, defined in init
+        :return:
+        '''
         ref = Chem.AddHs(mol1)
         prb = Chem.AddHs(mol2)
 
-        fm_score = self.get_FeatureMapScore(ref, prb, score_mode)
+        fm_score = self.get_fm_score(ref, prb, score_mode)
         fm_score = np.clip(fm_score, 0, 1)
 
         protrude_dist = rdShapeHelpers.ShapeProtrudeDist(ref, prb,
@@ -70,7 +91,22 @@ class SuCOS:
 
         return SuCOS_score
 
+
     def sucos_mol_to_many(self, ref_file, prb_file, score_mode=FeatMaps.FeatMapScoreMode.All, p=False):
+        '''
+        compare multiple mol objects to one reference mol
+        :param ref_file: sdf or mol file of reference (hit) mol
+        :param prb_file: sdf file of mols to compare to reference
+        :param score_mode: default = featuremaps score, defined in init
+        :param p: True/False - print sucos and tanimoto score for every comparison
+        :return:
+            results_sucos: a dict containing idx of each prb mol as key, and sucos score as value
+            results_tani: a dict containing idx of each prb mol as key, and tanimoto similarity distance score as value
+            smi_mol: a list of smiles strings for the prb mols
+            prb_mols: a list of rdkit mol objects for the prb mols
+            reflig: an rdkit mol object for the reference
+        '''
+        
         reflig = Chem.MolFromMolFile(ref_file, sanitize=True)
         ref = Chem.AddHs(reflig)
         prb_mols = Chem.SDMolSupplier(prb_file, sanitize=True)
@@ -86,7 +122,7 @@ class SuCOS:
 
             prb = Chem.AddHs(prb_mol)
 
-            fm_score = get_FeatureMapScore(ref, prb, score_mode)
+            fm_score = fm_score(ref, prb, score_mode)
             fm_score = np.clip(fm_score, 0, 1)
 
             protrude_dist = rdShapeHelpers.ShapeProtrudeDist(ref, prb,
