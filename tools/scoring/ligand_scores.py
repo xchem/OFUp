@@ -161,3 +161,57 @@ class SuCOS:
             ids.append(int(i))
             r.pop(i, None)
         return ids
+
+
+    def score_all_confs(self, initial_hit, all_confs_paths):
+
+        '''
+        Score all conformers of all molecules in a given list against a reference ligand and return the best scoring
+        conformer for each candidate
+        :param initial_hit: the mol or sdf file containing the initial hit/ reference
+        :param all_confs_paths: a list of sdf files for the molecules to score against the reference
+        :return: a dictionary containing:
+                 - candidate name: the name of the file before '.sdf' of the candidate molecule
+                 - candidate smiles: the smiles string of the candidate
+                 - candidate conformers file: the respective file
+                 - best sucos: the best (highest) sucos score of all conformers
+                 - best sucos id: the index in the sdf file of the best sucos scoring conformer
+                 - best tanimoto: the best (lowest) tanimoto distance score of all conformers
+                 - best tanimoto id: the index in the sdf file of the best tanimoto distance scoring conformer
+        '''
+
+        all_results_dict = {
+            'candidate_name': [],
+            'candidate_smiles': [],
+            'candidate_conformers_file': [],
+            'initial_hit': [],
+            'best_sucos': [],
+            'best_sucos_id': [],
+            'best_tanimoto': [],
+            'best_tanimoto_id': [],
+        }
+
+        for i in range(0, len(all_confs_paths)):
+            results_sucos, results_tani, smiles, prb_mols, reflig = self.sucos_mol_to_many(ref_file=initial_hit,
+                                                                                           prb_file=all_confs_paths[i])
+            print('running ' + str(i) + '/' + str(len(all_confs_paths)))
+            # best sucos socre and id
+            r = results_sucos.copy()
+            idx = self.select_high_or_low(r, 1)[0]
+            sucos_score = results_sucos[str(idx)]
+            # best tanimoto socre and id
+            s = results_tani.copy()
+            idy = self.select_high_or_low(s, 1, high=False)[0]
+            tani_score = results_tani[str(idy)]
+
+            all_results_dict['candidate_name'].append(
+                all_confs_paths[i].split('/')[-1].replace('.sdf', ''))
+            all_results_dict['candidate_smiles'].append(smiles)
+            all_results_dict['candidate_conformers_file'].append(all_confs_paths[i])
+            all_results_dict['initial_hit'].append(initial_hit.split('/')[-1])
+            all_results_dict['best_sucos'].append(sucos_score)
+            all_results_dict['best_sucos_id'].append(idx)
+            all_results_dict['best_tanimoto'].append(tani_score)
+            all_results_dict['best_tanimoto_id'].append(idy)
+
+        return all_results_dict
