@@ -215,3 +215,16 @@ class SuCOS:
             all_results_dict['best_tanimoto_id'].append(idy)
 
         return all_results_dict
+
+    def mols_from_df(self, df, files_col='candidate_conformers_file', id_col='best_sucos_id'):
+        '''
+        Get a list of rdkit mol objects from a dataframe of the results from score_all_confs via. sucos score
+        :param df: the pandas dataframe to use
+        :param files_col: the column that contains the path of files
+        :param id_col: the column that contains the indices of the mol to select from the file in files_col
+        :return: a list of rdkit mol objects
+        '''
+        mols = [Chem.SDMolSupplier(f)[int(idx)] for f, idx in [(df.iloc[i][files_col],
+                                                                df.iloc[i][id_col])
+                                                               for i in range(0, len(df))]]
+        return mols
