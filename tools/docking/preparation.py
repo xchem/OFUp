@@ -23,10 +23,10 @@ def prep_and_split(lig_sdf):
     no_mols = len([x for x in suppl])
     i = 1
     for mol in pybel.readfile("sdf", lig_sdf):
-        mol.write("pdbqt", "%s.pdbqt" % lig_sdf.replace('.sdf', str(i)))
+        mol.write("pdbqt", "%s_prepared.pdbqt" % lig_sdf.replace('.sdf', str(i)))
         i += 1
 
-    names = [lig_sdf.replace('.sdf', '.pdbqt').split('.')[0] + str(n) + '.pdbqt' for n in range(1, no_mols + 1)]
+    names = [lig_sdf.split('.')[0] + str(n) + '._prepared.pdbqt' for n in range(1, no_mols + 1)]
 
     return names
 
