@@ -60,3 +60,39 @@ class PathSelector():
             self.select.options = list(zip(keys, vals))
             with self.select.hold_trait_notifications():
                 self.select.value = ()
+
+class DockButtons():
+    def __init__(self, path_selector):
+        
+        item_layout = ui.Layout(margin='0px 50px 0px 5px')
+        
+        self.f = path_selector
+        self.pdb_button = ui.Button(description="Set PDB file", layout=item_layout)
+        self.pdb_button.on_click(self.on_button_clicked)
+
+        self.lig_button = ui.Button(description="Set ligand(s) SDF file", layout=item_layout)
+        self.lig_button.on_click(self.on_button_clicked)
+
+        self.ref_button = ui.Button(description="Set ref ligand SDF file", layout=item_layout)
+        self.ref_button.on_click(self.on_button_clicked)
+        
+        
+    
+    def fun(self, a):
+        a = self.f.file
+        return a
+
+    def on_button_clicked(self, b):
+        pth = self.fun(b)
+        if not pth:
+            print('PLEASE SELECT A PATH FROM THE THING ABOVE!')
+            return
+        b.description = pth
+        
+    def render_buttons(self):
+
+        widge = ui.HBox([ui.Label('Protein:'), self.pdb_button, 
+                      ui.Label('Query Ligands:'), self.lig_button, 
+                      ui.Label('Reference Ligand:'), self.ref_button])
+    
+        return widge
