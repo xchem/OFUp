@@ -1,9 +1,10 @@
-from tools.misc import obconv
+from ..misc import obconv
 from htmd.ui import *
 import numpy as np
 from rdkit import Chem
 from rdkit.Chem import rdShapeHelpers
 from random import randint
+import pybel
 
 
 def prep_ligands(lig_sdf):
@@ -18,14 +19,14 @@ def prep_ligands(lig_sdf):
 
 
 def prep_and_split(lig_sdf):
-
     suppl = Chem.SDMolSupplier(lig_sdf)
     no_mols = len([x for x in suppl])
+    i = 1
+    for mol in pybel.readfile("sdf", lig_sdf):
+        mol.write("pdbqt", "%s.pdbqt" % lig_sdf.replace('.sdf', str(i)))
+        i += 1
 
-    obconv(in_type='sdf', out_type='pdbqt', in_file=lig_sdf, out_file=lig_sdf.replace('.sdf', '.pdbqt'),
-           options=['h', 'm'])
-
-    names = [lig_sdf.replace('.sdf', '.pdbqt').split('.')[0] + n + '.pdbqt' for n in no_mols]
+    names = [lig_sdf.replace('.sdf', '.pdbqt').split('.')[0] + str(n) + '.pdbqt' for n in range(1, no_mols + 1)]
 
     return names
 
