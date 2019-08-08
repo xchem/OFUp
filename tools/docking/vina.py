@@ -71,9 +71,10 @@ def vina_dock_multi(protein_pdb, ligands_sdf,
     logs = glob.glob(os.path.join(docking_dir, '*_docked.log'))
     for f in logs:
         shutil.move(f, os.path.join(docking_dir, 'logs/'))
-        
+
     in_ligs = glob.glob(os.path.join(docking_dir, '*_prepared.pdbqt'))
     for f in in_ligs:
         shutil.move(f, os.path.join(docking_dir, 'in_ligs/'))
+
 
     return out
