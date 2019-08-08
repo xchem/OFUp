@@ -1,0 +1,14 @@
+name: ofup
+channels:
+- rdkit
+- defaults
+- openbabel
+dependencies:
+- pip
+- rdkit
+- requests
+- pandas
+- numpy
+- coverage
+- openbabel
+- jupyter
