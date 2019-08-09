@@ -13,31 +13,36 @@ These notebooks can be run from:
 
 ## Installation
 
-This has only been  tested on Mac, but the beauty of docker containers is that they should run identically on any OS
+This has only been  tested on Mac, but the beauty of docker containers is that they should run identically on any OS  
+
 
 ### Container install
 
 Requirements: 
 - Docker (https://www.docker.com/products/docker-desktop)
 - git
-- basic knowledge of the terminal
+- basic knowledge of the terminal  
+
 
 **1. Clone this repository**
 
 ```
 git clone https://github.com/xchem/OFUp.git
-```
+```  
+
 
 **2. Build the docker container**
 
-The HTMD package (https://www.acellera.com/products/high-throughput-molecular-dynamics/, https://github.com/Acellera/htmd) is used in this repository, and requires licensing (please refer to the HTMD documentation for licensing terms). Don't worry, we've looked after that for you, but you will have to provide some information when you are building your container in order to register.
+The HTMD package (https://www.acellera.com/products/high-throughput-molecular-dynamics/, https://github.com/Acellera/htmd) is used in this repository, and requires licensing (please refer to the HTMD documentation for licensing terms). Don't worry, we've looked after that for you, but you will have to provide some information when you are building your container in order to register.  
+
 
 To build the container:
 ```
 docker build -t ofup . --build-arg name='Some Person' --build-arg institution='Institution of Fun' --build-arg email='some.person@iofun.com' --build-arg city='Funland' --build-arg country='Funplace'
 ```
 
-Replacing the name, institution, email, city and country values with your own details. 
+Replacing the name, institution, email, city and country values with your own details.   
+
 
 That's it! We'll show you how to run the container in the next section  
 
