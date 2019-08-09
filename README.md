@@ -70,3 +70,15 @@ This does:
 - ```ofup```: the name of the container
 - ```/bin/bash```: uses bash as the shell to interact with the container
 
+You may also want to mount a folder from your machine into the container, so that work you do in it is not lost:
+
+```
+docker run -it --rm -p 8888:8888 \
+--mount type=bind,source=/Users/res3/michellab/XChem-examples/KALRNA/,target=/Rachael/KALRNA \
+ofup /bin/bash
+```
+
+The mount command here binds ```/Users/res3/michellab/XChem-examples/KALRNA/``` on the local machine to ```/Rachael/KALRNA``` in the container. 
+
+That means that any files I change in the container under ```/Rachael/KALRNA``` will also change on my computer in ```/Users/res3/michellab/XChem-examples/KALRNA/```.
+
