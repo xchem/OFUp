@@ -23,6 +23,7 @@ Requirements:
 - git
 - basic knowledge of the terminal  
 <br/>
+
 **1. Clone this repository**
 
 ```
@@ -51,10 +52,13 @@ Replacing the name, institution, email, city and country values with your own de
 That's it! We'll show you how to run the container in the next section 
 
 <br/>
+
 ---
 ### Anaconda install (Coming soon...)
 ---
+
 <br/><br/>
+
 ## Usage
 
 ### Running example notebooks from the docker container
@@ -87,7 +91,9 @@ The mount command here binds ```/Users/res3/michellab/XChem-examples/KALRNA/``` 
 That means that any files I change in the container under ```/Rachael/KALRNA``` will also change on my computer in ```/Users/res3/michellab/XChem-examples/KALRNA/```.
 
 ---
+
 <br/>
+
 **2. Run the notebook server from the container**
 
 Theres a script to do this! From insude of the container:
