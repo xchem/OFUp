@@ -22,13 +22,14 @@ Requirements:
 - Docker (https://www.docker.com/products/docker-desktop)
 - git
 - basic knowledge of the terminal  
----
+
 **1. Clone this repository**
 
 ```
 git clone https://github.com/xchem/OFUp.git
 ```  
----
+
+
 **2. Build the docker container**
 
 The HTMD package (https://www.acellera.com/products/high-throughput-molecular-dynamics/, https://github.com/Acellera/htmd) is used in this repository, and requires licensing (please refer to the HTMD documentation for licensing terms). Don't worry, we've looked after that for you, but you will have to provide some information when you are building your container in order to register.  
@@ -49,17 +50,16 @@ Replacing the name, institution, email, city and country values with your own de
 
 That's it! We'll show you how to run the container in the next section 
 
+
 ---
----
-### Anaconda install
+### Anaconda install  
 
 Coming soon...  
-
+---
 
 ## Usage
 
 ### Running example notebooks from the docker container
----
 **1. Run the container as an interactive session**
 
 ```
