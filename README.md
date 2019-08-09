@@ -73,9 +73,9 @@ This does:
 - ```--rm```: removes the container automatically when you exit
 - ```-p 8888:8888```: forwards port 8888 in the container to 8888 on your computer (default port for running jupyter notebooks)
 - ```ofup```: the name of the container
-- ```/bin/bash```: uses bash as the shell to interact with the container
-
-You may also want to mount a folder from your machine into the container, so that work you do in it is not lost:
+- ```/bin/bash```: uses bash as the shell to interact with the container  
+  
+**You may also want to mount a folder from your machine into the container, so that work you do in it is not lost:**
 
 ```
 docker run -it --rm -p 8888:8888 \
