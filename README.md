@@ -9,7 +9,7 @@ There are example notebooks (see: https://github.com/xchem/OFUp/tree/master/exam
 These notebooks can be run from:
 1. The containerised environment provided here (via. Docker container)
 2. Manual installation (recommended: via. a conda environment)  
-
+<br/><br/>
 
 ## Installation
 
@@ -22,13 +22,13 @@ Requirements:
 - Docker (https://www.docker.com/products/docker-desktop)
 - git
 - basic knowledge of the terminal  
-
+<br/>
 **1. Clone this repository**
 
 ```
 git clone https://github.com/xchem/OFUp.git
 ```  
-
+<br/>
 
 **2. Build the docker container**
 
@@ -50,11 +50,11 @@ Replacing the name, institution, email, city and country values with your own de
 
 That's it! We'll show you how to run the container in the next section 
 
-
+<br/>
 ---
 ### Anaconda install (Coming soon...)
 ---
-
+<br/><br/>
 ## Usage
 
 ### Running example notebooks from the docker container
@@ -87,7 +87,7 @@ The mount command here binds ```/Users/res3/michellab/XChem-examples/KALRNA/``` 
 That means that any files I change in the container under ```/Rachael/KALRNA``` will also change on my computer in ```/Users/res3/michellab/XChem-examples/KALRNA/```.
 
 ---
-
+<br/>
 **2. Run the notebook server from the container**
 
 Theres a script to do this! From insude of the container:
