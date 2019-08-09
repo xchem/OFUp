@@ -38,7 +38,12 @@ The HTMD package (https://www.acellera.com/products/high-throughput-molecular-dy
 
 To build the container:
 ```
-docker build -t ofup . --build-arg name='Some Person' --build-arg institution='Institution of Fun' --build-arg email='some.person@iofun.com' --build-arg city='Funland' --build-arg country='Funplace'
+docker build -t ofup . \
+--build-arg name='Some Person' \
+--build-arg institution='Institution of Fun' \
+--build-arg email='some.person@iofun.com' \
+--build-arg city='Funland' \
+--build-arg country='Funplace'
 ```
 
 Replacing the name, institution, email, city and country values with your own details.   
