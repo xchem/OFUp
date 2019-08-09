@@ -96,3 +96,39 @@ class DockButtons():
                       ui.Label('Reference Ligand:'), self.ref_button])
     
         return widge
+
+
+class InputBoxSet():
+    def __init__(self, tlabel):
+        self.inbox = ui.Text(description=tlabel)
+        self.button = ui.Button(description='Set', icon='check')
+        self.button.on_click(self.on_button_clicked)
+
+        self.button2 = ui.Button(description='Create', icon='plus-square')
+        self.button2.on_click(self.create_dir)
+
+    def fun(self, a):
+        if os.path.isdir(self.inbox.value):
+            a = self.inbox.value
+            print(a)
+            return a
+        else:
+            raise Exception('please input a valid path!')
+
+    def on_button_clicked(self, b):
+        pth = self.fun(b)
+        b.description = pth
+
+    def create_dir(self, b):
+        if not os.path.isdir(self.inbox.value):
+            os.makedirs(self.inbox.value)
+            print(f'Created: {self.inbox.value}')
+        else:
+            print(f'Directory {self.inbox.value} exists!')
+
+    def render(self):
+
+        widge = ui.HBox([self.inbox, self.button, self.button2])
+
+        return widge
+

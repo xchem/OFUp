@@ -5,6 +5,7 @@ import subprocess
 from joblib import Parallel, delayed
 import multiprocessing
 import glob
+from tqdm import tqdm
 
 vina_exe = shutil.which('vina')
 
@@ -30,6 +31,18 @@ def vina_run(prot, lig, conf=None, cx=None, cy=None, cz=None, sx=None, sy=None, 
 
 def vina_dock_multi(protein_pdb, ligands_sdf,
                     conf=None, docking_dir=os.getcwd(), multiproc=False, exe=vina_exe):
+    '''
+    Dock multiple ligands from an sdf file against a protein, with a given configuration file with vina.
+    Also does preparation from pdb and sdf
+
+    :param protein_pdb: the input pdb file to prepare and dock against
+    :param ligands_sdf: an sdf file of multiple ligands to split, prepare and dock
+    :param conf: the path of a configuration file (required for now)
+    :param docking_dir: the output directory
+    :param multiproc: use multi-processing? (boolean)
+    :param exe: the path to the vina executable
+    :return:
+    '''
     shutil.copy(ligands_sdf, docking_dir)
     shutil.copy(protein_pdb, docking_dir)
     if conf:
@@ -56,16 +69,16 @@ def vina_dock_multi(protein_pdb, ligands_sdf,
         cwd = os.getcwd()
         os.chdir(docking_dir)
         num_cores = multiprocessing.cpu_count()
-        out, err, command = Parallel(n_jobs=num_cores)(delayed(vina_run)(prot=protein_pdbqt, lig=lig,
-                                                                         conf=conf, exe=exe) for lig in lig_files)
+        Parallel(n_jobs=num_cores)(delayed(vina_run)(prot=protein_pdbqt, lig=lig,
+                                                     conf=conf, exe=exe) for lig in tqdm(lig_files))
         os.chdir(cwd)
         
     if not os.path.isdir(os.path.join(docking_dir, 'docked/')):
         os.mkdir(os.path.join(docking_dir, 'docked/'))
     if not os.path.isdir(os.path.join(docking_dir, 'logs/')):
         os.mkdir(os.path.join(docking_dir, 'logs/'))
-    if not os.path.isdir(os.path.join(docking_dir, 'in_ligs/')):
-        os.mkdir(os.path.join(docking_dir, 'in_ligs/'))
+    if not os.path.isdir(os.path.join(docking_dir, 'inputs/')):
+        os.mkdir(os.path.join(docking_dir, 'inputs/'))
 
     docked_files = glob.glob(os.path.join(docking_dir, '*_docked.pdbqt'))
     for f in docked_files:
@@ -78,11 +91,3 @@ def vina_dock_multi(protein_pdb, ligands_sdf,
     in_ligs = glob.glob(os.path.join(docking_dir, '*_prepared.pdbqt'))
     for f in in_ligs:
         shutil.move(f, os.path.join(docking_dir, 'in_ligs/'))
-        
-    print_str = f"Docking complete! Your results have been saved to: \
-\ndocked ligands: {os.path.join(docking_dir, 'docked/')} \
-\nlog files: {os.path.join(docking_dir, 'logs/')} \
-\nprepared input files: {os.path.join(docking_dir, 'logs/')}"
-
-
-    return print_str
