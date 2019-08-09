@@ -22,15 +22,13 @@ Requirements:
 - Docker (https://www.docker.com/products/docker-desktop)
 - git
 - basic knowledge of the terminal  
-
-
+---
 **1. Clone this repository**
 
 ```
 git clone https://github.com/xchem/OFUp.git
 ```  
-
-
+---
 **2. Build the docker container**
 
 The HTMD package (https://www.acellera.com/products/high-throughput-molecular-dynamics/, https://github.com/Acellera/htmd) is used in this repository, and requires licensing (please refer to the HTMD documentation for licensing terms). Don't worry, we've looked after that for you, but you will have to provide some information when you are building your container in order to register.  
@@ -49,9 +47,10 @@ docker build -t ofup . \
 Replacing the name, institution, email, city and country values with your own details.   
 
 
-That's it! We'll show you how to run the container in the next section  
+That's it! We'll show you how to run the container in the next section 
 
-
+---
+---
 ### Anaconda install
 
 Coming soon...  
@@ -60,7 +59,7 @@ Coming soon...
 ## Usage
 
 ### Running example notebooks from the docker container
-
+---
 **1. Run the container as an interactive session**
 
 ```
@@ -74,6 +73,8 @@ This does:
 - ```-p 8888:8888```: forwards port 8888 in the container to 8888 on your computer (default port for running jupyter notebooks)
 - ```ofup```: the name of the container
 - ```/bin/bash```: uses bash as the shell to interact with the container  
+
+---
   
 **You may also want to mount a folder from your machine into the container, so that work you do in it is not lost:**
 
@@ -87,7 +88,9 @@ The mount command here binds ```/Users/res3/michellab/XChem-examples/KALRNA/``` 
 
 That means that any files I change in the container under ```/Rachael/KALRNA``` will also change on my computer in ```/Users/res3/michellab/XChem-examples/KALRNA/```.
 
-**2. Run the notebook server from the container
+---
+
+**2. Run the notebook server from the container**
 
 Theres a script to do this! From insude of the container:
 
