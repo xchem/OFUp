@@ -1,0 +1,3 @@
+[submodule "tools/scoring/ProLIF"]
+	path = tools/scoring/ProLIF
+	url = git@github.com:xchem/ProLIF.git

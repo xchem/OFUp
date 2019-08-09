@@ -73,21 +73,3 @@ def vina_dock_multi(protein_pdb, ligands_sdf,
                                                      conf=conf, exe=exe) for lig in tqdm(lig_files))
         os.chdir(cwd)
         
-    if not os.path.isdir(os.path.join(docking_dir, 'docked/')):
-        os.mkdir(os.path.join(docking_dir, 'docked/'))
-    if not os.path.isdir(os.path.join(docking_dir, 'logs/')):
-        os.mkdir(os.path.join(docking_dir, 'logs/'))
-    if not os.path.isdir(os.path.join(docking_dir, 'inputs/')):
-        os.mkdir(os.path.join(docking_dir, 'inputs/'))
-
-    docked_files = glob.glob(os.path.join(docking_dir, '*_docked.pdbqt'))
-    for f in docked_files:
-        shutil.move(f, os.path.join(docking_dir, 'docked/'))
-
-    logs = glob.glob(os.path.join(docking_dir, '*_docked.log'))
-    for f in logs:
-        shutil.move(f, os.path.join(docking_dir, 'logs/'))
-
-    in_ligs = glob.glob(os.path.join(docking_dir, '*_prepared.pdbqt'))
-    for f in in_ligs:
-        shutil.move(f, os.path.join(docking_dir, 'in_ligs/'))
