@@ -52,9 +52,7 @@ That's it! We'll show you how to run the container in the next section
 
 
 ---
-### Anaconda install  
-
-Coming soon...  
+### Anaconda install (Coming soon...)
 ---
 
 ## Usage
