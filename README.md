@@ -87,3 +87,17 @@ The mount command here binds ```/Users/res3/michellab/XChem-examples/KALRNA/``` 
 
 That means that any files I change in the container under ```/Rachael/KALRNA``` will also change on my computer in ```/Users/res3/michellab/XChem-examples/KALRNA/```.
 
+**2. Run the notebook server from the container
+
+Theres a script to do this! From insude of the container:
+
+```
+/code/start_jupyter.sh
+```
+
+If there's a permissions error:
+
+```
+chmod 775 /code/start_jupyter.sh
+/code/start_jupyter.sh
+```
