@@ -17,7 +17,7 @@ class PlifScore:
 
         Fingerprint().generateIFP(ligand=self.reference_ligand, protein=self.protein)
 
-    def score_conformers(self, file, write=False, method='tanimoto'):
+    def score_conformers(self, file, write=False, method='tanimoto', score_col='PLIF_SCORE'):
         df = pdt.LoadSDF(file, embedProps=True)
 
         scores = []
@@ -31,16 +31,14 @@ class PlifScore:
             try:
                 Fingerprint().generateIFP(ligand=ligand, protein=self.protein)
                 ligand_score = round(float(ligand.getSimilarity(reference=self.reference_ligand, method=method)), 2)
-                scores.append(ligand_score)
+                scores.append(str(ligand_score))
             except:
                 scores.append(None)
-            # df.iloc[i]['PLIF_SCORE'] = str(ligand_score)
+
+        df[score_col] = scores
 
         if write:
-            pdt.WriteSDF(df, file)
-
-        df['PLIF_SCORE'] = scores
-
+            pdt.WriteSDF(df, file, properties=list(df.columns))
 
         return df
 
