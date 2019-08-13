@@ -56,3 +56,13 @@ def vina_pdbqt_to_sdf(ifile, output):
         sdf.write(mol)
 
     sdf.close()
+
+
+def is_interactive():
+    p = get_ipython()
+
+    if 'jupyter' in p.kernel.config['IPKernelApp']['connection_file']:
+        interactive = True
+    else:
+        interactive = False
+    return interactive
