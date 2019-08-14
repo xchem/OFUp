@@ -1,6 +1,6 @@
-from ProLIF.prolif.ligand import Ligand
-from ProLIF.prolif.protein import Protein
-from ProLIF.prolif.fingerprint import Fingerprint
+from .ProLIF.prolif.ligand import Ligand
+from .ProLIF.prolif.protein import Protein
+from .ProLIF.prolif.fingerprint import Fingerprint
 from rdkit import Chem
 import rdkit.Chem.PandasTools as pdt
 
