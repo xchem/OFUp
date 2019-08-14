@@ -1,3 +1,5 @@
+# :exclamation: Under construction and untested :exclamation:
+
 # Open Follow-Up (OFUp)
 
 ## Introduction
@@ -57,8 +59,6 @@ That's it! We'll show you how to run the container in the next section
 ### Anaconda install (Coming soon...)
 ---
 
-<br/><br/>
-
 ## Usage
 
 ### Running example notebooks from the docker container
@@ -108,3 +108,29 @@ If there's a permissions error:
 chmod 775 /code/start_jupyter.sh
 /code/start_jupyter.sh
 ```
+
+## Advanced usage
+
+The example notebooks can also be executed and analysed in new jupyter notebooks, or via the command line. This uses an awesome package called papermill: https://github.com/nteract/papermill/
+
+Interacting with the output from notebooks run and produced with papermill can be done with another awesome package, scrapbook: https://github.com/nteract/scrapbook
+
+
+### Example:
+
+to run a notebook from an interactive python session or from a new jupyter notebook:
+
+```python
+import papermill as pm
+
+pm.execute_notebook('dock_multi_against_ref.ipynb', 
+                    'test_interactive_docking.ipynb',
+                    parameters=dict(pdb_file = '/data/XX02KALRNA-x1389_1/XX02KALRNA-x1389_1.pdb',
+                                   ligands_file = '/data/XX02KALRNA-x1389_1/250_surprise_sucos.sdf',
+                                   ref_file = '/data/XX02KALRNA-x1389_1/XX02KALRNA-x1389_1.sdf',
+                                   conf_file = 'conf.txt',
+                                   docking_directory = '/data/docking/XX02KALRNA-x1389_1/surprise_set'))
+```
+
+
+
