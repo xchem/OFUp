@@ -4,16 +4,24 @@ import os
 import subprocess
 from joblib import Parallel, delayed
 import multiprocessing
-import glob
 from tqdm import tqdm
 
 vina_exe = shutil.which('vina')
 
-def vina_run(prot, lig, conf=None, cx=None, cy=None, cz=None, sx=None, sy=None, sz=None, exh=None, cpus=4, exe=vina_exe):
+def vina_run(prot, lig, conf=None, cx=None, cy=None, cz=None, sx=None, sy=None, sz=None, exh=None, cpus=4, exe=vina_exe,
+             overwrite=False):
+
     if not vina_exe:
         raise Exception('vina executable was not found on your path, please specify it!')
+
     out = lig.replace('.pdbqt', '_docked.pdbqt')
     log = lig.replace('.pdbqt', '_docked.log')
+
+    if not overwrite and os.path.isfile(out):
+        print('File with same name as expected output already exists, '
+              'and you told me not to overwrite. Will not do anything')
+        return None
+
     if not conf:
         command = f"{exe} --center_x {cx} --center_y {cy} --center_z {cz} --size_x {sx} --size_y {sy} --size_z {sz}" \
             f"--exhaustiveness {exh} --num_modes 9999 --energy_range 9999 --receptor {prot} --ligand {lig}" \
@@ -30,7 +38,7 @@ def vina_run(prot, lig, conf=None, cx=None, cy=None, cz=None, sx=None, sy=None, 
 
 
 def vina_dock_multi(protein_pdb, ligands_sdf,
-                    conf=None, docking_dir=os.getcwd(), multiproc=False, exe=vina_exe):
+                    conf=None, docking_dir=os.getcwd(), multiproc=False, exe=vina_exe, overwrite=False):
     '''
     Dock multiple ligands from an sdf file against a protein, with a given configuration file with vina.
     Also does preparation from pdb and sdf
@@ -41,6 +49,7 @@ def vina_dock_multi(protein_pdb, ligands_sdf,
     :param docking_dir: the output directory
     :param multiproc: use multi-processing? (boolean)
     :param exe: the path to the vina executable
+    :param overwrite: overwrite the expected output file if it already exists? (boolean)
     :return:
     '''
     shutil.copy(ligands_sdf, docking_dir)
@@ -62,7 +71,7 @@ def vina_dock_multi(protein_pdb, ligands_sdf,
         cwd = os.getcwd()
         os.chdir(docking_dir)
         for lig in lig_files:
-            out, err, command = vina_run(prot=protein_pdbqt, lig=lig, conf=conf, exe=exe)
+            out, err, command = vina_run(prot=protein_pdbqt, lig=lig, conf=conf, exe=exe, overwrite=overwrite)
         os.chdir(cwd)
 
     else:
@@ -70,6 +79,6 @@ def vina_dock_multi(protein_pdb, ligands_sdf,
         os.chdir(docking_dir)
         num_cores = multiprocessing.cpu_count()
         Parallel(n_jobs=num_cores)(delayed(vina_run)(prot=protein_pdbqt, lig=lig,
-                                                     conf=conf, exe=exe) for lig in tqdm(lig_files))
+                                                     conf=conf, exe=exe, overwrite=overwrite) for lig in tqdm(lig_files))
         os.chdir(cwd)
-        
+
