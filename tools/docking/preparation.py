@@ -1,5 +1,6 @@
 from ..misc import obconv
-from htmd.ui import *
+from moleculekit.molecule import Molecule
+from moleculekit.tools.preparation import proteinPrepare
 import numpy as np
 from rdkit import Chem
 from rdkit.Chem import rdShapeHelpers

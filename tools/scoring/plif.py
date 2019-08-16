@@ -10,12 +10,14 @@ class PlifScore:
         self.protein = Protein(inputFile=protein_pdb)
         self.protein.residuesFromMOL2File()
 
-        suppl = Chem.SDMolSupplier(reference_file)
-        mols = [Chem.AddHs(x) for x in suppl]
-        ref = mols[0]
-        self.reference_ligand = Ligand(ref)
+        if reference_file:
+            suppl = Chem.SDMolSupplier(reference_file)
+            mols = [Chem.AddHs(x) for x in suppl]
+            ref = mols[0]
 
-        Fingerprint().generateIFP(ligand=self.reference_ligand, protein=self.protein)
+            self.reference_ligand = Ligand(ref)
+
+            Fingerprint().generateIFP(ligand=self.reference_ligand, protein=self.protein)
 
     def score_conformers(self, file, write=False, method='tanimoto', score_col='PLIF_SCORE'):
         df = pdt.LoadSDF(file, embedProps=True)
@@ -41,6 +43,40 @@ class PlifScore:
             pdt.WriteSDF(df, file, properties=list(df.columns))
 
         return df
+
+    def score_mol(self, mol):
+        self.lig = Ligand(mol)
+        self.lig.ifp = Fingerprint().generateIFP(ligand=self.lig, protein=self.protein)
+
+        return self.lig.ifp
+
+
+def cluster_vects(fps, cutoff=0.2):
+    from rdkit import DataStructs
+    from rdkit.ML.Cluster import Butina
+
+    # first generate the distance matrix:
+    dists = []
+    nfps = len(fps)
+    for i in range(1, nfps):
+        sims = DataStructs.BulkTanimotoSimilarity(fps[i], fps[:i])
+        dists.extend([1 - x for x in sims])
+
+    # now cluster the data:
+    cs = Butina.ClusterData(dists, nfps, cutoff, isDistData=True)
+    return cs
+
+
+def cluster_plifs(mol_list, protein, cutoff=0.5):
+
+    prot_plif = PlifScore(protein_pdb=protein, reference_file=None)
+    vects = [prot_plif.score_mol(lig) for lig in mol_list if lig]
+    clusters = cluster_vects(vects, cutoff=cutoff)
+
+    return clusters
+
+
+
 
 
 

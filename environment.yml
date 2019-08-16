@@ -3,8 +3,16 @@ channels:
 - rdkit
 - defaults
 - openbabel
+- acellera
 dependencies:
 - pip
+- pip:
+    - papermill
+    - nteract-scrapbook
+    - nglview
+    - itables
+    - joblib
+- moleculekit
 - rdkit
 - requests
 - pandas
