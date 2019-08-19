@@ -94,8 +94,13 @@ class DockButtons():
         widge = ui.HBox([ui.Label('Protein:'), self.pdb_button, 
                       ui.Label('Query Ligands:'), self.lig_button, 
                       ui.Label('Reference Ligand:'), self.ref_button])
+
+    def render_one_button(self, label):
+        button = ui.Button(description=label)
+        button.on_click(self.on_button_clicked)
+
     
-        return widge
+        return button
 
 
 class InputBoxSet():
