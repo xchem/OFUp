@@ -1,0 +1,12 @@
+size_x = 17.1533
+    size_y = 15.9571
+    size_z = 17.853599999999997
+    center_x = -3.69015
+    center_y = 12.40545
+    center_z = 30.593899999999998
+    num_modes = 9999
+    energy_range = 9999
+    exhaustiveness = 20
+    cpu=4
+    seed=666999669
+    
