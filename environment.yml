@@ -12,12 +12,13 @@ dependencies:
     - nglview
     - itables
     - joblib
+    - matplotlib==3.0.2
 - moleculekit
-- rdkit
+- rdkit=2019.03.3.0
 - requests
-- pandas
-- numpy
+- pandas=0.24.2
+- numpy=1.16.4
 - coverage
-- openbabel
+- openbabel=2.4.1
 - jupyter
 - htmd-pdb2pqr
